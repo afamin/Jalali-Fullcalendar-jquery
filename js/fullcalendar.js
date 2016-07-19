@@ -2,7 +2,7 @@
  * FullCalendar v2.2.3 jalali
  * Docs & License: http://arshaw.com/fullcalendar/
  * (c) 2013 Adam Shaw
- * (c) 2016 Amin Fathi :)
+ * (c) 2016 Amin Fathi
  */
 
 (function(factory) {
@@ -930,9 +930,26 @@
 
 
 		function updateTitle() {
-			var ss = moment(currentView.title, 'MMM YYYY').format('jYYYY jMMMM');
 
-			header.updateTitle(prN(ss));
+			switch (currentView.name){
+				case 'month':
+					var ss = moment(currentView.title, 'MMM YYYY').format('jYYYY jMMMM');
+					header.updateTitle(prN(ss));
+					break;
+				case 'agendaWeek':
+					var ss = moment(currentView.title, 'MMM DD- ,YYYY').format('jYYYY jD ');
+					ss += moment(currentView.title, 'MMM -DD ,YYYY').format('-jD jMMMM');
+					console.log(moment(currentView.title))
+					console.log(ss)
+					header.updateTitle(prN(ss));
+					break;
+				case 'agendaDay':
+
+					var ss = moment(currentView.title, 'MMM DD, YYYY').format('jYYYY/jMM/jDD' );
+					header.updateTitle(prN(ss));
+					break;
+			}
+
 		}
 
 
@@ -8530,7 +8547,7 @@
 			return '' +
 					'<td class="' + classes.join(' ') + '" data-date="' + date.format() + '">' +
 
-					+date.format('D') +'<h2 style="position: relative; left: 25px;">'+prN(dayj)+'</h2>'+
+					+date.format('D') +'<h2 style="position: relative; left: 25%;">'+prN(dayj)+'</h2>'+
 					'</td>';
 		},
 
@@ -8705,7 +8722,7 @@
 
 
 		incrementDate: function(date, delta) {
-			return date.clone().stripTime().add(delta, 'jMonth').startOf('jMonth');
+			return date.clone().stripTime().add(delta, 'Month').startOf('Month');
 		},
 
 
@@ -8729,10 +8746,10 @@
 			this.end = this.skipHiddenDays(this.end, -1, true); // move in from the last invisible days of the week
 
 			rowCnt = Math.ceil( // need to ceil in case there are hidden days
-					this.end.diff(this.start, 'jWeek', true) // returnfloat=true
+					this.end.diff(this.start, 'Week', true) // returnfloat=true
 			);
 			if (this.isFixedWeeks()) {
-				this.end.add(6 - rowCnt, 'jWeek');
+				this.end.add(6 - rowCnt, 'Week');
 				rowCnt = 6;
 			}
 
